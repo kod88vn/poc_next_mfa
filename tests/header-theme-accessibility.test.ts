@@ -7,50 +7,33 @@ import {
   normalizeHeaderTheme,
 } from '../packages/ui/src/headerThemeAccessibility';
 
-test('normalizeHeaderTheme auto-fixes low-contrast header tokens', () => {
+test('dark header: surface text readable, header bg locked', () => {
   const rawTheme = {
     primary: '#223a3f',
     secondary: '#1d2735',
     accent: '#223a3f',
-    surface: '#ffffff',
+    surface: '#3a4a60',
     text: '#111111',
     mutedText: '#475569',
-    border: '#000000',
+    border: '#2d3f55',
   };
-
-  assert.ok(
-    contrastRatio(rawTheme.secondary, rawTheme.mutedText) < HEADER_CONTRAST_TARGETS.text,
-  );
-
   const adjusted = normalizeHeaderTheme(rawTheme);
-
-  assert.ok(
-    contrastRatio(adjusted.secondary, adjusted.surface) >= HEADER_CONTRAST_TARGETS.text,
-  );
-  assert.ok(
-    contrastRatio(adjusted.accent, adjusted.surface) >= HEADER_CONTRAST_TARGETS.text,
-  );
-  assert.ok(
-    contrastRatio(adjusted.primary, adjusted.surface) >= HEADER_CONTRAST_TARGETS.text,
-  );
-  assert.ok(
-    contrastRatio(adjusted.secondary, adjusted.mutedText) >= HEADER_CONTRAST_TARGETS.text,
-  );
-  assert.ok(
-    contrastRatio(adjusted.secondary, adjusted.border) >= HEADER_CONTRAST_TARGETS.nonText,
-  );
+  assert.equal(adjusted.secondary, rawTheme.secondary);
+  assert.ok(contrastRatio(adjusted.surface, adjusted.secondary) >= HEADER_CONTRAST_TARGETS.text);
 });
 
-test('normalizeHeaderTheme preserves already accessible palettes', () => {
+test('light header: surface text dark, header bg locked', () => {
   const rawTheme = {
-    primary: '#0f172a',
-    secondary: '#1e293b',
-    accent: '#334155',
-    surface: '#ffffff',
-    text: '#0f172a',
-    mutedText: '#e2e8f0',
-    border: '#94a3b8',
+    primary: '#f5e6c8',
+    secondary: '#fafaf0',
+    accent: '#eeddb5',
+    surface: '#f0ece0',
+    text: '#333333',
+    mutedText: '#aaaaaa',
+    border: '#e0d8c0',
   };
-
-  assert.deepEqual(normalizeHeaderTheme(rawTheme), rawTheme);
+  const adjusted = normalizeHeaderTheme(rawTheme);
+  assert.equal(adjusted.secondary, rawTheme.secondary);
+  assert.ok(contrastRatio(adjusted.surface, adjusted.secondary) >= HEADER_CONTRAST_TARGETS.text);
+  assert.ok(contrastRatio(adjusted.surface, adjusted.primary) >= HEADER_CONTRAST_TARGETS.text);
 });

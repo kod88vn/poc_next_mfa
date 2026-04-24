@@ -16,25 +16,6 @@ export function Header({
   currentZone = 'shell',
   showDudaLink = true,
 }: HeaderProps) {
-  const zoneBadgeStyle: React.CSSProperties =
-    currentZone === 'shell'
-      ? {
-        backgroundColor: 'rgba(99, 102, 241, 0.25)',
-        color: '#c7d2fe',
-        borderColor: 'rgba(129, 140, 248, 0.6)',
-      }
-      : currentZone === 'shop'
-        ? {
-          backgroundColor: 'rgba(16, 185, 129, 0.25)',
-          color: '#a7f3d0',
-          borderColor: 'rgba(16, 185, 129, 0.6)',
-        }
-        : {
-          backgroundColor: 'rgba(217, 119, 6, 0.25)',
-          color: '#fef3c7',
-          borderColor: 'rgba(217, 119, 6, 0.6)',
-        };
-
   return (
     <header
       className="text-white shadow-lg"
@@ -59,7 +40,7 @@ export function Header({
           boxSizing: 'border-box',
         }}
       >
-        {/* Brand + zone badge + nav */}
+        {/* Brand + nav */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           {/* Cross-zone link: must use <a>, not Next.js <Link> */}
           <a
@@ -76,27 +57,10 @@ export function Header({
             MFE Store
           </a>
 
-          <span
-            style={{
-              ...zoneBadgeStyle,
-              fontSize: '0.75rem',
-              padding: '0.125rem 0.5rem',
-              borderRadius: '9999px',
-              fontFamily: 'monospace',
-              border: '1px solid',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            zone:{currentZone}
-          </span>
-
           <nav
             style={{
               display: 'flex',
               gap: '1.5rem',
-              backgroundColor: 'var(--brand-accent, #2563eb)',
-              borderRadius: '9999px',
-              padding: '0.375rem 0.875rem',
             }}
           >
             <a

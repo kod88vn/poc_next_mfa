@@ -171,43 +171,68 @@ export function ensureColorContrast(
     .sort((a, b) => b.contrast - a.contrast || a.distance - b.distance)[0]?.candidate ?? color;
 }
 
+/**
+ * Normalizes foreground tokens so they are readable against the header background
+ * (`secondary`). The header background is never modified — only the elements that
+ * sit on top of it are adjusted to meet WCAG AA contrast thresholds.
+ *
+ * Token roles in the Header component:
+ *   secondary   → header background                        (LOCKED)
+ *   surface     → brand name text + nav link text on header bg
+ *   primary     → cart-count badge background; surface text sits on it
+ *   accent      → secondary / accent background elements
+ *   mutedText   → cart icon / secondary text on header bg
+ *   border      → visible borders / dividers on header bg
+ */
 export function normalizeHeaderTheme<T extends ThemePalette>(theme: T): T {
-  const secondary = ensureColorContrast(
-    theme.secondary,
+  // Header background is kept exactly as extracted from the vendor site.
+  const headerBg = theme.secondary;
+
+  // surface: the primary text color used DIRECTLY on the header background (brand name, nav links, etc.)
+  const surface = ensureColorContrast(
     theme.surface,
+    headerBg,
     HEADER_CONTRAST_TARGETS.text,
-    [theme.text, theme.primary, theme.accent],
+    [theme.text, '#000000', '#111827', '#ffffff', '#f8fafc'],
   );
+
+  // accent: secondary background elements on the header background.
   const accent = ensureColorContrast(
     theme.accent,
-    theme.surface,
-    HEADER_CONTRAST_TARGETS.text,
-    [theme.primary, secondary, theme.text],
+    headerBg,
+    HEADER_CONTRAST_TARGETS.nonText,
+    [theme.primary, '#334155', '#1e293b', '#0f172a', '#ffffff', '#f1f5f9'],
   );
+
+  // primary: badge background; surface text must be readable on it.
   const primary = ensureColorContrast(
     theme.primary,
-    theme.surface,
+    surface,
     HEADER_CONTRAST_TARGETS.text,
-    [accent, secondary, theme.text],
+    [theme.accent, '#1e40af', '#0f172a', '#111827'],
   );
+
+  // mutedText: secondary / muted elements (cart icon etc.) on the header background.
   const mutedText = ensureColorContrast(
     theme.mutedText,
-    secondary,
-    HEADER_CONTRAST_TARGETS.text,
-    [theme.surface, theme.text],
+    headerBg,
+    HEADER_CONTRAST_TARGETS.nonText,
+    [surface, theme.text, '#94a3b8', '#cbd5e1'],
   );
+
+  // border: visible dividers / outlines on the header background.
   const border = ensureColorContrast(
     theme.border,
-    secondary,
+    headerBg,
     HEADER_CONTRAST_TARGETS.nonText,
-    [mutedText, theme.surface, theme.text],
+    [mutedText, surface, '#475569', '#64748b'],
   );
 
   return {
     ...theme,
     primary,
-    secondary,
     accent,
+    surface,
     mutedText,
     border,
   };
