@@ -1,3 +1,6 @@
+// Load root monorepo .env first so DUDA_ORIGIN has a default; app-level .env overrides it.
+require('../../load-root-env');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /**

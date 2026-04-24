@@ -1,3 +1,6 @@
+// Load root monorepo .env first so DUDA_ORIGIN has a default; app-level .env overrides it.
+require('../../load-root-env');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -21,6 +24,11 @@ const nextConfig = {
    */
   async rewrites() {
     return [
+      {
+        // Duda zone mounted under /duda.
+        source: '/duda',
+        destination: 'http://localhost:3002/duda',
+      },
       {
         // Product listing  →  http://localhost:3001/shop
         source: '/shop',

@@ -9,14 +9,19 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
+    "test": "tsx --test tests/**/*.test.ts",
     "type-check": "turbo type-check",
     "clean": "turbo clean"
   },
   "devDependencies": {
+    "tsx": "^4.19.2",
     "turbo": "^2.3.3"
   },
   "packageManager": "npm@10.9.2",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "jsdom": "^29.0.2"
   }
 }

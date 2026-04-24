@@ -71,6 +71,12 @@ export default function HomePage() {
             Browse the Shop →
           </a>
           <a
+            href="/duda"
+            className="inline-flex items-center px-6 py-3 rounded-lg bg-slate-900 text-white font-semibold hover:bg-slate-800 transition-colors shadow-sm"
+          >
+            Open Duda Zone →
+          </a>
+          <a
             href="https://turbo.build/repo/docs"
             target="_blank"
             rel="noopener noreferrer"

@@ -7,7 +7,7 @@
  */
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { Header } from '@repo/ui';
+import { Header, getDudaBrandTheme, normalizeHeaderTheme } from '@repo/ui';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -25,15 +25,40 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
+  const brandTheme = normalizeHeaderTheme(await getDudaBrandTheme());
   const cartCount = parseInt(
     cookieStore.get('mfe_cart_count')?.value ?? '0',
     10,
   );
 
+  const brandVars = {
+    '--brand-primary': brandTheme.primary,
+    '--brand-secondary': brandTheme.secondary,
+    '--brand-accent': brandTheme.accent,
+    '--brand-surface': brandTheme.surface,
+    '--brand-text': brandTheme.text,
+    '--brand-muted': brandTheme.mutedText,
+    '--brand-border': brandTheme.border,
+    '--brand-font-family': brandTheme.fontFamily,
+    fontFamily: 'var(--brand-font-family)',
+  } as React.CSSProperties;
+
   return (
     <html lang="en">
-      <body className="bg-slate-50 text-slate-900 antialiased min-h-screen">
-        <Header cartCount={cartCount} currentZone="shell" />
+      <head>
+        {brandTheme.fontStylesheetUrls.map((href) => (
+          <link key={href} rel="stylesheet" href={href} />
+        ))}
+      </head>
+      <body
+        className="bg-slate-50 text-slate-900 antialiased min-h-screen"
+        style={brandVars}
+      >
+        <Header
+          cartCount={cartCount}
+          currentZone="shell"
+          showDudaLink
+        />
         <main>{children}</main>
       </body>
     </html>

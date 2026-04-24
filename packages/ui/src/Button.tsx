@@ -13,14 +13,32 @@ export interface ButtonProps {
 }
 
 const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
-  primary:
-    'bg-blue-600 text-white border-transparent hover:bg-blue-700 active:bg-blue-800',
-  secondary:
-    'bg-slate-600 text-white border-transparent hover:bg-slate-700 active:bg-slate-800',
-  outline:
-    'bg-transparent border-current hover:bg-white/10',
-  danger:
-    'bg-red-600 text-white border-transparent hover:bg-red-700 active:bg-red-800',
+  primary: 'text-white border-transparent',
+  secondary: 'text-white border-transparent',
+  outline: 'bg-transparent border-current',
+  danger: 'text-white border-transparent',
+};
+
+const variantStyles: Record<
+  NonNullable<ButtonProps['variant']>,
+  React.CSSProperties
+> = {
+  primary: {
+    backgroundColor: 'var(--brand-primary, #2563eb)',
+    color: 'var(--brand-surface, #ffffff)',
+  },
+  secondary: {
+    backgroundColor: 'var(--brand-secondary, #334155)',
+    color: 'var(--brand-surface, #ffffff)',
+  },
+  outline: {
+    color: 'var(--brand-text, currentColor)',
+    borderColor: 'var(--brand-border, currentColor)',
+  },
+  danger: {
+    backgroundColor: '#dc2626',
+    color: '#ffffff',
+  },
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
@@ -46,14 +64,16 @@ export function Button({
       className={[
         'inline-flex items-center justify-center rounded-md border font-medium',
         'transition-colors duration-150',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2',
         'disabled:opacity-50 disabled:cursor-not-allowed',
+        variant === 'outline' ? 'hover:bg-white/10' : 'hover:opacity-90',
         variantClasses[variant],
         sizeClasses[size],
         className,
       ]
         .filter(Boolean)
         .join(' ')}
+      style={variantStyles[variant]}
     >
       {children}
     </button>

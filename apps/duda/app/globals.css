@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.duda-theme-card {
+	background: var(--brand-surface, #ffffff);
+	border-color: var(--brand-border, #cbd5e1);
+	color: var(--brand-text, #0f172a);
+}
+
+.duda-landing img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 0.5rem;
+}
